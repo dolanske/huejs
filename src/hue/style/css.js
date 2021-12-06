@@ -24,7 +24,7 @@ export const addStyles = (styles) =>
   styles.map((item) => stylesToCompile.add(item))
 
 // Removes any invalid characters from a class name
-export const formatInvalidChar = (value) => {
+const sanitizeClassName = (value) => {
   // Get the character which the value contains
   const invalid = invalidChars.find((char) => value.includes(char))
 
@@ -60,7 +60,7 @@ const createStyle = (style) => {
 
   const parts = style.split('-')
   const dashes = parts.length - 1
-  const className = formatInvalidChar(style.split(':')[0])
+  const className = sanitizeClassName(style.split(':')[0])
 
   /**
    * If only one dash is present in the split, we can assume that what's
@@ -105,12 +105,12 @@ const createStyle = (style) => {
 export function formatAddedStyleNode(value) {
   if (Array.isArray(value)) {
     addStyles(value)
-    return value.map((item) => formatInvalidChar(item.split(':')[0])).join(' ')
+    return value.map((item) => sanitizeClassName(item.split(':')[0])).join(' ')
   }
 
   addStyle(value)
 
-  return formatInvalidChar(value.split(':')[0])
+  return sanitizeClassName(value.split(':')[0])
 }
 
 /**
@@ -119,6 +119,8 @@ export function formatAddedStyleNode(value) {
  * @param {String | Number} id
  */
 export const createStyleComponent = (id) => {
+  if (styles[id]) return
+
   const newStyle = document.createElement('style')
   newStyle.setAttribute('id', id)
   document.head.appendChild(newStyle)
@@ -153,11 +155,11 @@ export const generateClassStyles = (id) => {
  * @returns Scoped = true; returns a class name which should be put in the class="" tag
  * @returns Scoped = false; returns an inline string which should be placed within the style="" tag
  *
+ * This function also doesn't have to be reactive, because all of the styling is
+ * calculated on the component. So on each re-render the styles are also updated.
  */
 
-export const createComponentStyles = (data, scoped = true) => {
-  const id = 'style-' + `${Math.random()}`.slice(2).toFixed
-
+export const createComponentStyles = (id, data, scoped = true) => {
   if (scoped) {
     // Append new style component
     createStyleComponent(id)
@@ -176,17 +178,21 @@ export const createComponentStyles = (data, scoped = true) => {
 const generateCssFromObject = (data) => {
   let css = ''
 
-  // We need to add a selector, add { after it
-  // then loop over the style object and format the CSS values
-  // If no children array is provided, close the class with }
+  /**
+   * We need to add a selector, add { after it
+   * then loop over the style object and format the CSS values
+   * If no children array is provided, close the class with }
+   */
 
   const styleCssNode = (node) => {
     css += node.selector + '{'
     css += generateInlineStyles(node.style)
 
     if (node.children) {
+      // Loop over children and call this function again
       node.children.forEach((child) => styleCssNode(child))
     }
+
     css += '}'
   }
 

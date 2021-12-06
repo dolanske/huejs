@@ -9,40 +9,18 @@ import { createComponentStyles } from '../hue/style/css.js'
 
 export default {
   render() {
-    const inlineStyle = createComponentStyles(
-      {
-        selector: '.test-class',
-        style: {
-          marginLeft: '10px',
-          backgroundColor: '#f0f',
-        },
-        children: [
-          {
-            selector: '.nested-class',
-            style: {
-              marginTop: '200px',
-            },
-          },
-          {
-            selector: '#app',
-            style: {
-              backgroundColor: '#000',
-            },
-            children: [
-              {
-                selector: '.henlo',
-                style: {
-                  fontSize: '20px',
-                },
-              },
-            ],
-          },
-        ],
+    const style = createComponentStyles('test', {
+      selector: '#app',
+      style: {
+        display: 'flex',
+        height: '100vh',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f0f',
       },
-      false
-    )
+    })
 
-    return h('div', { class: ['p-32'], style: inlineStyle }, [
+    return h('div', { class: ['p-32', style] }, [
       RouterLink.render({ name: 'HelloHome', text: 'Home' }),
       RouterLink.render({ name: 'HelloAbout', text: 'About' }),
       h('hr'),
