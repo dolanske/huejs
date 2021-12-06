@@ -93,7 +93,7 @@ export const createRouter = (data: object) => {
     activeRoute.value = route
   }
 
-  window.addEventListener('popstate', (e) => {
+  window.addEventListener('popstate', () => {
     // console.log("location: " + document.location + ", state: " + JSON.stringify(event.state));
     const path = window.location.pathname
     const route = getRoute({ by: 'path', value: path })

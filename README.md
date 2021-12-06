@@ -1,4 +1,4 @@
-# hue 0.0.1
+# hue 0.0.3
 
 Tired of vue and react? Well now you can be tired of both of them at the same time!
 

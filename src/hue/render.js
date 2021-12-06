@@ -1,30 +1,9 @@
 import { watchEffect } from './reactive.js'
 import {
-  initStyleGenerator,
-  generateCSS,
-  addStyle,
-  addStyles,
-  formatInvalidChar,
+  createStyleComponent,
+  formatAddedStyleNode,
+  generateClassStyles,
 } from './style/css.js'
-
-/**
- * Helper function that checks if input style is an array
- * or simple string and format's components class prop accordingly
- * while also adding the class(es) to the generator.
- *
- * It is only used to format class names during rendering,
- * so it isn't part of the css module.
- */
-function formatAddedStyleNode(value) {
-  if (Array.isArray(value)) {
-    addStyles(value)
-    return value.map((item) => formatInvalidChar(item.split(':')[0])).join(' ')
-  }
-
-  addStyle(value)
-
-  return formatInvalidChar(value.split(':')[0])
-}
 
 /**
  * ---------------- RENDERING API ----------------
@@ -185,7 +164,8 @@ export function mountApp(
 
   let isMounted = false
   let prevVdom
-  initStyleGenerator()
+
+  createStyleComponent('global')
 
   watchEffect(() => {
     if (!isMounted) {
@@ -204,6 +184,6 @@ export function mountApp(
     }
 
     // mounted()
-    generateCSS()
+    generateClassStyles('global')
   })
 }

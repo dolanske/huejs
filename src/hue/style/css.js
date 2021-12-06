@@ -14,11 +14,9 @@ import {
  * atomic css solution for generic styles.
  */
 
-// const style = new Set()
-// let prevStyle = new Set()
 let nextStyle = new Set()
 let stylesToCompile = new Set()
-let styleElement = null
+const styles = {}
 
 export const addStyle = (style) => stylesToCompile.add(style)
 export const addStyles = (styles) =>
@@ -95,22 +93,40 @@ const createStyle = (style) => {
   `
 }
 
-export const initStyleGenerator = () => {
-  const id = 'generated-css'
-
-  if (!styleElement) {
-    // Append styles to the body
-    const style = document.createElement('style')
-    style.setAttribute('id', id)
-    document.head.appendChild(style)
-
-    styleElement = style
+/**
+ * Helper function that checks if input style is an array
+ * or simple string and format's components class prop accordingly
+ * while also adding the class(es) to the generator.
+ *
+ * It is only used to format class names during rendering,
+ * so it isn't part of the css module.
+ */
+export function formatAddedStyleNode(value) {
+  if (Array.isArray(value)) {
+    addStyles(value)
+    return value.map((item) => formatInvalidChar(item.split(':')[0])).join(' ')
   }
+
+  addStyle(value)
+
+  return formatInvalidChar(value.split(':')[0])
 }
 
-const replaceInnerStyle = () => {
-  styleElement.innerText = ''
-  styleElement.appendChild(document.createTextNode([...nextStyle].join('')))
+/**
+ * Append new style component
+ *
+ * @param {String | Number} id
+ */
+export const createStyleComponent = (id) => {
+  const newStyle = document.createElement('style')
+  newStyle.setAttribute('id', id)
+  document.head.appendChild(newStyle)
+  styles[id] = newStyle
+}
+
+export const updateStyleComponent = (id) => {
+  styles[id].innerText = ''
+  styles[id].appendChild(document.createTextNode([...nextStyle].join('')))
 }
 
 /**
@@ -119,15 +135,12 @@ const replaceInnerStyle = () => {
  * no class is generated twice and that unused classes are
  * automatically removed.
  */
-export const generateCSS = () => {
+export const generateClassStyles = (id) => {
   // Loop over
   for (const key of stylesToCompile) {
     nextStyle.add(createStyle(key))
   }
 
-  replaceInnerStyle()
-
-  // prevStyle = nextStyle
-  // nextStyle.clear()
+  updateStyleComponent(id)
   stylesToCompile.clear()
 }
