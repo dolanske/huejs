@@ -1,7 +1,8 @@
 import App from './components/App.js'
 import { mountApp } from './hue/render.js'
 
-import { createRouter } from './hue/router/router.js'
+//@ts-ignore
+import { createRouter } from './hue/router/router.ts'
 import RouteHome from './components/route-containers/RouteHome.js'
 import RouteAbout from './components/route-containers/RouteAbout.js'
 // import { createStore } from './store/store.js'

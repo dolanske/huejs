@@ -1,5 +1,4 @@
 import { ref } from '../reactive.js'
-
 interface Route {
   path?: string,
   container?: object | Function,
@@ -7,7 +6,8 @@ interface Route {
   props?: object,
   title?: string,
   redirect?: string,
-  default?: boolean
+  default?: boolean,
+  query?: string,
 }
 
 interface Router {
@@ -19,10 +19,11 @@ interface Router {
 export const createRouter = (data: object) => {
   let activeRoute = ref({})
 
-  const { beforeEnter, onEnter, routes }: Router = data
+  const { beforeEnter, onEnter, routes } = data as Router
 
-  const getRoute = ({ by, value }) =>
-    routes.find((route) => route[by] === value)
+  const getRoute = ({ by, value }: {by: string, value: string|number}): Route | undefined => {
+    return routes.find((route: Route | any) => route[by] === value)
+  }
 
   const back = () => window.history.go(-1)
   const go = (n: number) => window.history.go(n)
@@ -48,11 +49,12 @@ export const createRouter = (data: object) => {
      */
 
     if (route.name && !route.path)
-      route = getRoute({ by: 'name', value: route.name })
+      route = getRoute({ by: 'name', value: route.name }) as Route
     if (!route) return
 
     if (route.redirect) {
-      push(getRoute({ by: 'path', value: route.redirect }))
+      const redirect: Route | undefined = getRoute({ by: 'path', value: route.redirect })
+      if (redirect) push(redirect)
       return
     }
 
@@ -64,7 +66,7 @@ export const createRouter = (data: object) => {
 
     /** */
 
-    const { name, path, title, container, props, query, hash } = route
+    const { path } = route as Route
 
     if (beforeEnter) {
       /**
@@ -104,6 +106,7 @@ export const createRouter = (data: object) => {
   if (defRoute) push(defRoute)
   else push({ path: '/' })
 
+  //@ts-ignore
   window.router = {
     /**
      * Router Methods
@@ -120,5 +123,7 @@ export const createRouter = (data: object) => {
   }
 }
 
-export const useRouter = () => window.router
-export const useRoute = () => window.router.activeRoute.value
+//@ts-ignore
+export const useRouter = () => window.router 
+//@ts-ignore
+export const useRoute = () => window.router.activeRoute.value 

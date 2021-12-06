@@ -1,5 +1,5 @@
 import { h } from '../render.js'
-import { useRouter } from './router.js'
+import { useRouter } from './router.ts'
 
 export default {
   render({ name, text }) {

@@ -23,4 +23,5 @@
 ## Backburner
 
 - [] Create a compiler, adds some boilerplate to the components
+  - Add some unique identifier to each component to create reusability
 - [] Lifecycle hooks

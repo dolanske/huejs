@@ -15,7 +15,7 @@ import {
  * It is only used to format class names during rendering,
  * so it isn't part of the css module.
  */
-function formatAddStyle(value) {
+function formatAddedStyleNode(value) {
   if (Array.isArray(value)) {
     addStyles(value)
     return value.map((item) => formatInvalidChar(item.split(':')[0])).join(' ')
@@ -62,7 +62,7 @@ function mount(vnode, container) {
 
       // for CSS.js compiling
       if (key === 'class' && value) {
-        value = formatAddStyle(value)
+        value = formatAddedStyleNode(value)
       }
 
       // Check for event listeners
@@ -109,7 +109,7 @@ function patch(n1, n2) {
       if (newValue !== oldValue) {
         // for CSS.js compiling
         if (key === 'class' && newValue) {
-          newValue = formatAddStyle(newValue)
+          newValue = formatAddedStyleNode(newValue)
         }
 
         el.setAttribute(key, newValue)
@@ -166,6 +166,13 @@ function patch(n1, n2) {
 
     mount(n2, parent)
   }
+}
+
+function showVirtualDom(component) {
+  mount(
+    h('pre', {}, JSON.stringify(component.render())),
+    document.getElementById('app')
+  )
 }
 
 export function mountApp(
