@@ -9,18 +9,34 @@ import { createComponentStyles } from '../hue/style/css.js'
 
 export default {
   render() {
-    const style = createComponentStyles('test', {
+    createComponentStyles('global', {
       selector: '#app',
       style: {
         display: 'flex',
         height: '100vh',
         justifyContent: 'center',
+        fontSize: '1.2rem',
         alignItems: 'center',
-        backgroundColor: '#f0f',
+        backgroundColor: '#f0f00f',
       },
+      nested: [
+        {
+          selector: 'hr',
+          style: {
+            borderColor: '#000',
+          },
+        },
+        {
+          selector: '.router-link',
+          style: {
+            display: 'inline-block',
+            margin: '0 8px',
+          },
+        },
+      ],
     })
 
-    return h('div', { class: ['p-32', style] }, [
+    return h('div', { class: ['p-32'] }, [
       RouterLink.render({ name: 'HelloHome', text: 'Home' }),
       RouterLink.render({ name: 'HelloAbout', text: 'About' }),
       h('hr'),

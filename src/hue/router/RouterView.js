@@ -6,8 +6,6 @@ export default {
   render(props = {}) {
     const route = useRoute()
 
-    return h('div', { ...Object.assign(props, route ? route.props : {}) }, [
-      route.container.render(),
-    ])
+    return h('div', { ...props }, [route.container.render({ ...route.props })])
   },
 }

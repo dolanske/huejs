@@ -1,5 +1,6 @@
 import App from './components/App.js'
 import { mountApp } from './hue/render.js'
+import { Route } from './hue/router/types.js'
 
 //@ts-ignore
 import { createRouter } from './hue/router/router.ts'
@@ -63,9 +64,10 @@ createRouter({
   // beforeEnter: (prev: Object, current: Object) => {
   //   return true
   // },
-  // onEnter: (prev: Object, current: Object) => {
-  //   document.title = current.title
-  // },
+  onEnter: (from: Route, to: Route) => {
+    //@ts-ignore
+    document.title = to.title
+  },
 })
 
 /**

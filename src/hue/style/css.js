@@ -19,6 +19,8 @@ let nextStyle = new Set()
 let stylesToCompile = new Set()
 const styles = {}
 
+/*----------  Helpers & Css in comment generator  ----------*/
+
 export const addStyle = (style) => stylesToCompile.add(style)
 export const addStyles = (styles) =>
   styles.map((item) => stylesToCompile.add(item))
@@ -113,6 +115,8 @@ export function formatAddedStyleNode(value) {
   return sanitizeClassName(value.split(':')[0])
 }
 
+/*----------  DOM Manipulation  ----------*/
+
 /**
  * Append new style component to the DOM.
  *
@@ -148,31 +152,50 @@ export const generateClassStyles = (id) => {
   stylesToCompile.clear()
 }
 
-/**
- *
- * @param {Object} data Style object
- * @param {Boolean} scoped Changes how styles are formatted
- * @returns Scoped = true; returns a class name which should be put in the class="" tag
- * @returns Scoped = false; returns an inline string which should be placed within the style="" tag
- *
- * This function also doesn't have to be reactive, because all of the styling is
- * calculated on the component. So on each re-render the styles are also updated.
- */
+/*----------  In component generated styles  ----------*/
 
-export const createComponentStyles = (id, data, scoped = true) => {
-  if (scoped) {
-    // Append new style component
-    createStyleComponent(id)
-    // Generate style tree into a CSS string
-    const css = generateCssFromObject(data)
-    // Append new css string to the head
-    updateStyleComponent(id, css)
-
-    return id
+// TODO: Add new documentaion to this function
+// When compiler is a thing, it should automatically use scopeId
+// returned from the function and assign its class name to the
+//
+export const createComponentStyles = (type, data) => {
+  /**
+   * Default binding, if we want to add a global style object.
+   * We simply omit the type. But it must be checked for and
+   * assign the parameters corrently after
+   */
+  if (isObject(type)) {
+    data = type
+    type = 'global'
   }
 
-  // Generate and return formatted inline styles
-  return generateInlineStyles(data)
+  switch (type) {
+    // Add global style tag, class and styles will be available globally
+    case 'global': {
+      const css = generateCssFromObject(data)
+
+      createStyleComponent(data.selector)
+      updateStyleComponent(data.selector, css)
+    }
+
+    // Add scoped style, class and it's children only affect 1 component or its children
+    case 'scoped': {
+      data.selector =
+        data.selector + '-' + String(Math.random().toFixed(8)).slice(2)
+      const css = generateCssFromObject(data)
+      createStyleComponent(data.selector)
+      updateStyleComponent(data.selector, css)
+
+      // Return scoped class name to be used within the component
+      // Also need to slice
+      return data.selector.replace(/([#.])/, '')
+    }
+
+    // Generate and return formatted inline styles
+    case 'inline': {
+      return generateInlineStyles(data)
+    }
+  }
 }
 
 const generateCssFromObject = (data) => {
@@ -181,16 +204,16 @@ const generateCssFromObject = (data) => {
   /**
    * We need to add a selector, add { after it
    * then loop over the style object and format the CSS values
-   * If no children array is provided, close the class with }
+   * If no nested array is provided, close the class with }
    */
 
   const styleCssNode = (node) => {
     css += node.selector + '{'
     css += generateInlineStyles(node.style)
 
-    if (node.children) {
-      // Loop over children and call this function again
-      node.children.forEach((child) => styleCssNode(child))
+    if (node.nested) {
+      // Loop over nested children and call this function again
+      node.nested.forEach((child) => styleCssNode(child))
     }
 
     css += '}'

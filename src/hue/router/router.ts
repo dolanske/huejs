@@ -1,20 +1,5 @@
 import { ref } from '../reactive.js'
-interface Route {
-  path?: string,
-  container?: object | Function,
-  name?: string,
-  props?: object,
-  title?: string,
-  redirect?: string,
-  default?: boolean,
-  query?: string,
-}
-
-interface Router {
-  routes: Array<Route>,
-  beforeEnter(from: Route, to: Route): Function,
-  onEnter(from: Route, to: Route): Function,
-}
+import { Router, Route } from './types.js'
 
 export const createRouter = (data: object) => {
   let activeRoute = ref({})

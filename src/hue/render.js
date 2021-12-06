@@ -5,9 +5,7 @@ import {
   generateClassStyles,
 } from './style/css.js'
 
-/**
- * ---------------- RENDERING API ----------------
- */
+/*----------  Rendering API  ----------*/
 
 // export function h(tag: String, props: String | Object | null , children: Array<String | Function> | String | null) {
 export function h(tag, props, children) {

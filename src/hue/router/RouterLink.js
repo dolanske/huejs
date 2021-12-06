@@ -16,7 +16,10 @@ export default {
       {
         href: to.path,
         onClick: (e) => pushRoute(e),
-        class: router.activeRoute.name === to.name ? 'route-active' : '',
+        class: [
+          router.activeRoute.value.name === to.name ? 'route-active' : '',
+          'router-link',
+        ],
       },
       text
     )
