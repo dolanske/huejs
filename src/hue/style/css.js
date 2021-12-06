@@ -1,3 +1,4 @@
+import { isObject, kebabize } from '../utils.js'
 import {
   matchBase,
   matchModifiers,
@@ -113,7 +114,7 @@ export function formatAddedStyleNode(value) {
 }
 
 /**
- * Append new style component
+ * Append new style component to the DOM.
  *
  * @param {String | Number} id
  */
@@ -124,9 +125,9 @@ export const createStyleComponent = (id) => {
   styles[id] = newStyle
 }
 
-export const updateStyleComponent = (id) => {
+export const updateStyleComponent = (id, content) => {
   styles[id].innerText = ''
-  styles[id].appendChild(document.createTextNode([...nextStyle].join('')))
+  styles[id].appendChild(document.createTextNode(content))
 }
 
 /**
@@ -141,6 +142,74 @@ export const generateClassStyles = (id) => {
     nextStyle.add(createStyle(key))
   }
 
-  updateStyleComponent(id)
+  updateStyleComponent(id, [...nextStyle].join(''))
   stylesToCompile.clear()
+}
+
+/**
+ *
+ * @param {Object} data Style object
+ * @param {Boolean} scoped Changes how styles are formatted
+ * @returns Scoped = true; returns a class name which should be put in the class="" tag
+ * @returns Scoped = false; returns an inline string which should be placed within the style="" tag
+ *
+ */
+
+export const createComponentStyles = (data, scoped = true) => {
+  const id = 'style-' + `${Math.random()}`.slice(2).toFixed
+
+  if (scoped) {
+    // Append new style component
+    createStyleComponent(id)
+    // Generate style tree into a CSS string
+    const css = generateCssFromObject(data)
+    // Append new css string to the head
+    updateStyleComponent(id, css)
+
+    return id
+  }
+
+  // Generate and return formatted inline styles
+  return generateInlineStyles(data)
+}
+
+const generateCssFromObject = (data) => {
+  let css = ''
+
+  // We need to add a selector, add { after it
+  // then loop over the style object and format the CSS values
+  // If no children array is provided, close the class with }
+
+  const styleCssNode = (node) => {
+    css += node.selector + '{'
+    css += generateInlineStyles(node.style)
+
+    if (node.children) {
+      node.children.forEach((child) => styleCssNode(child))
+    }
+    css += '}'
+  }
+
+  styleCssNode(data)
+
+  return css
+}
+
+const generateInlineStyles = (data) => {
+  if (!isObject(data)) return ''
+
+  let style = ''
+
+  // Checks if we are passing in the same object as we'd use for actual css generation
+  // It's just a safety check, because this function is ran if scoped = false
+  const styleObject = data.style ? data.style : data
+
+  if (Object.keys(styleObject).length === 0) return ''
+
+  Object.entries(styleObject).forEach((entry) => {
+    const [index, value] = entry
+    style += kebabize(index) + ':' + value + ';'
+  })
+
+  return style
 }

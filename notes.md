@@ -20,10 +20,11 @@
 - [ ] Add global state management
   - [ ] First iteration should be a simple state object which should reflect in other components
 - [ ] CSS in JS per component (might be as easy as adding a formatting function and inserting it into a style prop during component rendering)
-  - [ ] Make <style> component creation generic
-  - [ ] Add createStyle({styles}, scoped: true | false) function that takes in an object of css styles to apply
-    - [ ] Must be reactive
-    - [ ] If scoped is true, create a unique classname & add a new <style> to the head. If not (default: just appent inline styling)
+  - [x] Make <style> component creation generic
+  - [x] Add createStyle({styles}, scoped: true | false) function that takes in an object of css styles to apply
+    - [x] Must be reactive - Doesn't have to be, it gets updated on re-render
+    - [x] If scoped is true, create a unique classname & add a new <style> to the head. If not (default: just appent inline styling)
+    - [ ] Style component isn't tied to an ID, it generates all the time, fix that and this is done
   - [ ] Rewrite css.js in typescript
 
 ## Backburner
