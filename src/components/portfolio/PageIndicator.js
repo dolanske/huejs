@@ -1,5 +1,5 @@
 import { h } from '../../hue/render/render'
-import { addComponentStyle } from '../../hue/style/css'
+import { addComponentStyle, nth } from '../../hue/style/css'
 import { from } from '../../hue/utils'
 import { color } from '../../script/color'
 
@@ -20,19 +20,19 @@ export default {
       },
       nested: [
         {
-          selector: 'li:nth-child(odd)',
-          style: {
-            width: '16px',
-            height: '16px',
-            border: `1px solid ${color('border')}`,
-            borderRadius: '50%',
-          },
-        },
-        {
-          selector: 'li:nth-child(even)',
-          style: {
-            height: '80px',
-            borderRight: `1px solid ${color('border')}`,
+          selector: 'li',
+          self: {
+            ...nth('child', 'odd', {
+              width: '16px',
+              height: '16px',
+              border: `1px solid ${color('border')}`,
+              borderRadius: '50%',
+            }),
+            ...nth('child', 'even', {
+              height: '80px',
+              borderRight: `1px solid ${color('border')}`,
+            }),
+            before: {},
           },
         },
       ],

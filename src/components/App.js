@@ -1,5 +1,5 @@
 import { h } from '../hue/render.js'
-import { addComponentStyle, addMixin, getMixin } from '../hue/style/css.js'
+import { addComponentStyle, addMixin, getMixin, nth } from '../hue/style/css.js'
 import { color } from '../script/color.js'
 
 import PageIndicator from './portfolio/PageIndicator.js'
@@ -17,6 +17,7 @@ export default {
 
     addComponentStyle({
       selector: '.app-wrap',
+
       style: {
         display: 'block',
         backgroundColor: color('black'),

@@ -61,4 +61,4 @@
 # Bugs
 
 - [x] Fix global styling generating scoped components too
-- [ ] Currently CSS generates nested css, need to change it to stack class names / selectors
+- [x] Currently CSS generates nested css, need to change it to stack class names / selectors

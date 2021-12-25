@@ -47,6 +47,12 @@ export const addMixin = (name, styleFunc) => (mixins[name] = styleFunc)
 export const getMixin = (name, params) => mixins[name]({ ...params })
 
 /**
+ * Converts input to a compiler readable array which contains the selector at index 0
+ * and the styles to apply at index 1
+ */
+export const nth = (type, which, style) => [`nth-${type}(${which})`, style]
+
+/**
  * We take class value. Check the value's type and determine, if unit can
  * even be applied. If yes, we also check if the provided unit type is even
  * supported. If this fails, we fallback to default type: _px_
@@ -231,12 +237,16 @@ const generateCssFromObject = (data) => {
     css += generateInlineStyles(node.style)
     css += '}'
 
-    if (node.nested) {
-      if (nestedSelectors !== node.selector + ' ')
-        nestedSelectors += node.selector + ' '
-      // Loop over nested children and call this function again
-      node.nested.forEach((child) => styleCssNode(child))
-    }
+    // TODO: implement self. stuff
+    // add events too
+
+    if (node.nth)
+      if (node.nested) {
+        if (nestedSelectors !== node.selector + ' ')
+          nestedSelectors += node.selector + ' '
+        // Loop over nested children and call this function again
+        node.nested.forEach((child) => styleCssNode(child))
+      }
   }
 
   styleCssNode(data)
