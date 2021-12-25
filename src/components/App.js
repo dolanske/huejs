@@ -1,46 +1,32 @@
 import { h } from '../hue/render.js'
+import { addComponentStyle, addMixin, getMixin } from '../hue/style/css.js'
+import { color } from '../script/color.js'
 
-import RouterView from '../hue/router/RouterView.js'
-import RouterLink from '../hue/router/RouterLink.js'
-
-import RouteHome from './route-containers/RouteHome.js'
-import RouteAbout from './route-containers/RouteAbout.js'
-import { createComponentStyles } from '../hue/style/css.js'
+import PageIndicator from './portfolio/PageIndicator.js'
+import SectionLanding from './portfolio/SectionLanding.js'
 
 export default {
   render() {
-    createComponentStyles('global', {
-      selector: '#app',
+    addMixin('font', ({ type = 'regular', size } = {}) => ({
+      fontFamily: `'Helvetica LT W01 ${
+        type === 'regular' ? 'Roman' : 'Bold'
+      }', sans-serif`,
+      fontWeight: 400,
+      fontSize: size,
+    }))
+
+    addComponentStyle({
+      selector: '.app-wrap',
       style: {
-        display: 'flex',
-        height: '100vh',
-        justifyContent: 'center',
-        fontSize: '1.2rem',
-        alignItems: 'center',
-        backgroundColor: '#f0f00f',
+        display: 'block',
+        backgroundColor: color('black'),
+        fontSize: '63.5%',
       },
-      nested: [
-        {
-          selector: 'hr',
-          style: {
-            borderColor: '#000',
-          },
-        },
-        {
-          selector: '.router-link',
-          style: {
-            display: 'inline-block',
-            margin: '0 8px',
-          },
-        },
-      ],
     })
 
-    return h('div', { class: ['p-32'] }, [
-      RouterLink.render({ name: 'HelloHome', text: 'Home' }),
-      RouterLink.render({ name: 'HelloAbout', text: 'About' }),
-      h('hr'),
-      RouterView.render(),
+    return h('div', { class: 'app-wrap' }, [
+      // PageIndicator.render(),
+      SectionLanding.render(),
     ])
   },
 }

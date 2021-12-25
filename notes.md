@@ -7,9 +7,9 @@
   - [x] Add router-link component
   - [x] FIX: Fix router view components not updating the DOM tree on update.
 
-  - [ ] Support for query
-  - [ ] Passing props
-  - [ ] Add active class to active RouterLink
+  - [ ] Support for query string
+  - [ ] Passing props to components
+  - [x] Add active class to active RouterLink
 
   ***
 
@@ -29,17 +29,20 @@
       - [x] Style component isn't tied to an ID, it generates all the time, fix that and this is done
       - [x] SCOPED still not implemented (returned class name should be composed of input id + generated ID)
     - [ ] Rewrite css.js in typescript
+    - [ ] Add support for :hover, child selectors, try utilizing js etc instead of just ":hover" etc
 
   ***
 
 - [ ] Reactivity
 
   - [ ] implement computed(callback: void)
-  - [ ] implement watch(propert: Ref, callback: void)
+  - [ ] implement watch(property: reactive, callback: void)
 
-- [ ] Create a compiler, adds some boilerplate to the components
+- [ ] Create a compiler, adds some boilerplate to the components (RETHINK)
 
   - [ ] Test if tempalte string usage is possible
+  - \*\*[ ] Rethink add auto injection of createTemplate during rendering. Components should only contain a render function which returns a string template
+
   - [ ] Add some unique identifier to each component to create reusability
   - [ ] Sanitize non-html default props and remove them when creating a DOM component
   - [ ] Slots
@@ -51,3 +54,10 @@
   - onCreated()
   - onUpdated()
   - beforeDestroy()
+
+---
+
+# Bugs
+
+- [x] Fix global styling generating scoped components too
+- [ ] Currently CSS generates nested css, need to change it to stack class names / selectors

@@ -1,4 +1,4 @@
-# hue 0.0.5
+# hue 0.0.7
 
 Tired of vue and react? Well now you can be tired of both of them at the same time!
 
@@ -14,5 +14,3 @@ I present you hue. This is a hobby project where I create my own javascript fram
 - Component lifecycle hooks (probably will need compiler for this step)
 
 ## Goal
-
-My ultimate goal is to create a working, dependency free framework and then write a different project using it. Currently I am thinking of rewriting my project 'Dogsitter' which _sits_ on a backburner at the moment.

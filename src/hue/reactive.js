@@ -123,12 +123,12 @@ export function watchEffect(effect) {
   activeEffect = null
 }
 
-export function computed(action) {
-  let result
+// export function computed(action) {
+//   let result
 
-  watchEffect(() => {
-    result = action()
-  })
+//   watchEffect(() => {
+//     result = action()
+//   })
 
-  return result
-}
+//   return result
+// }

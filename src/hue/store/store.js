@@ -1,7 +1,4 @@
-import mapGetters from './mapGetters.js'
-import mapState from './mapState.js'
-
-import { computed, reactive } from '../reactive.js'
+import { reactive } from '../reactive.js'
 
 /**
  * Global store variable, the single source of truth

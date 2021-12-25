@@ -18,6 +18,7 @@ import {
 let nextStyle = new Set()
 let stylesToCompile = new Set()
 const styles = {}
+const mixins = {}
 
 /*----------  Helpers & Css in comment generator  ----------*/
 
@@ -35,6 +36,15 @@ const sanitizeClassName = (value) => {
 
   return value
 }
+
+/**
+ * Adds a mixin, which when called simply returns a style object the same way
+ * as if we were creating a new component style. We can also make it dynasmic by
+ * passing in an object of parameters.
+ */
+
+export const addMixin = (name, styleFunc) => (mixins[name] = styleFunc)
+export const getMixin = (name, params) => mixins[name]({ ...params })
 
 /**
  * We take class value. Check the value's type and determine, if unit can
@@ -158,7 +168,7 @@ export const generateClassStyles = (id) => {
 // When compiler is a thing, it should automatically use scopeId
 // returned from the function and assign its class name to the
 //
-export const createComponentStyles = (type, data) => {
+export const addComponentStyle = (type, data) => {
   /**
    * Default binding, if we want to add a global style object.
    * We simply omit the type. But it must be checked for and
@@ -176,6 +186,8 @@ export const createComponentStyles = (type, data) => {
 
       createStyleComponent(data.selector)
       updateStyleComponent(data.selector, css)
+
+      break
     }
 
     // Add scoped style, class and it's children only affect 1 component or its children
@@ -208,6 +220,10 @@ const generateCssFromObject = (data) => {
    */
 
   const styleCssNode = (node) => {
+    // TODO: During recursive calls, must apply previous css selectors
+    // Currently this function actually returns SCSS
+    // let nestedSelector = node.selector
+
     css += node.selector + '{'
     css += generateInlineStyles(node.style)
 

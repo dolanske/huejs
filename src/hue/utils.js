@@ -9,3 +9,7 @@ export function isObject(value) {
   var type = typeof value
   return value != null && (type == 'object' || type == 'function')
 }
+
+export function isNil(value) {
+  return value === undefined || value === null
+}

@@ -4,6 +4,7 @@ import {
   formatAddedStyleNode,
   generateClassStyles,
 } from './style/css.js'
+import { isNil } from './utils.js'
 
 /*----------  Rendering API  ----------*/
 
@@ -11,13 +12,18 @@ import {
 export function h(tag, props, children) {
   // Support for ommiting props
   // Eg. h('p', 'hello world') will treat it as if only tag & children were entered
-  if (typeof props === 'string') {
+  if (typeof props === 'string' || typeof props === 'number') {
     children = props
     props = {}
   }
 
+  // TODO: Add support for plain text children alognside html nodes
+  // FOR NOW: only either a html node OR a plain text will be allowed
   // Convert any non-array children to string for the HTML node creation
-  if (!Array.isArray(children) && children) children = `${children}`
+  if (!Array.isArray(children) && !isNil(children)) children = `${children}`
+  else if (typeof children[0] === 'string') {
+    children = children[0]
+  }
 
   return {
     tag,
