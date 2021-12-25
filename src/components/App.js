@@ -25,7 +25,7 @@ export default {
     })
 
     return h('div', { class: 'app-wrap' }, [
-      // PageIndicator.render(),
+      PageIndicator.render(),
       SectionLanding.render(),
     ])
   },

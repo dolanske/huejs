@@ -28,8 +28,9 @@
       - [x] If scoped is true, create a unique classname & add a new <style> to the head. If not (default: just appent inline styling)
       - [x] Style component isn't tied to an ID, it generates all the time, fix that and this is done
       - [x] SCOPED still not implemented (returned class name should be composed of input id + generated ID)
+    - [ ] Support for inputting an array of objects with global styles
+    - [ ] Add support for :hover, after, before and child selectors. Try utilizing js etc instead of just ":hover" etc
     - [ ] Rewrite css.js in typescript
-    - [ ] Add support for :hover, child selectors, try utilizing js etc instead of just ":hover" etc
 
   ***
 
@@ -51,9 +52,9 @@
   ***
 
 - [ ] Lifecycle hooks
-  - onCreated()
-  - onUpdated()
-  - beforeDestroy()
+  - onCreated() // Gets called in mount func
+  - onUpdated() // Also should be somewhere in the patch func
+  - beforeDestroy() // Could be implemented in the patch func
 
 ---
 

@@ -219,20 +219,24 @@ const generateCssFromObject = (data) => {
    * If no nested array is provided, close the class with }
    */
 
+  let nestedSelectors = ''
+
   const styleCssNode = (node) => {
     // TODO: During recursive calls, must apply previous css selectors
     // Currently this function actually returns SCSS
-    // let nestedSelector = node.selector
 
-    css += node.selector + '{'
+    // css += nestedSelectors
+
+    css += nestedSelectors + node.selector + '{'
     css += generateInlineStyles(node.style)
+    css += '}'
 
     if (node.nested) {
+      if (nestedSelectors !== node.selector + ' ')
+        nestedSelectors += node.selector + ' '
       // Loop over nested children and call this function again
       node.nested.forEach((child) => styleCssNode(child))
     }
-
-    css += '}'
   }
 
   styleCssNode(data)

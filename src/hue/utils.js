@@ -13,3 +13,13 @@ export function isObject(value) {
 export function isNil(value) {
   return value === undefined || value === null
 }
+
+export function from(n) {
+  let arr = []
+
+  for (var i = 1; i <= n; i++) {
+    arr.push(i)
+  }
+
+  return arr
+}

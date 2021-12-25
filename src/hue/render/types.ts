@@ -1,12 +1,5 @@
 export interface Node {
   tag: string,
-  props: string | object | undefined,
+  props: string | object | undefined | Array<string | object> ,
   children: Array<string | object> | undefined | string
-}
-
-export interface Lifecycle {
-  onInit: void,
-  onCreated: void,
-  onUpdated: void,
-  beforeDestroy: void
 }
