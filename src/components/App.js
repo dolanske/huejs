@@ -48,36 +48,6 @@ export default {
       },
     })
 
-    // TESTING
-
-    // TODO: Test double nesting
-    // TODO: Test multiple nested objects
-    // TODO: Test with :self attribute
-
-    setStyle({
-      selector: ['.test', '.test-2', '.test-3'],
-      style: { color: 'red' },
-      nested: [
-        {
-          selector: 'h1',
-          style: {
-            color: 'blue',
-          },
-          self: {
-            hover: {
-              color: 'yellow',
-            },
-          },
-        },
-        // {
-        //   selector: 'h2',
-        //   style: {
-        //     color: 'pink',
-        //   },
-        // },
-      ],
-    })
-
     return h('div', { class: 'app-wrap' }, [
       PageIndicator.render(),
       SectionLanding.render(),
