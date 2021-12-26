@@ -29,7 +29,8 @@
       - [x] Style component isn't tied to an ID, it generates all the time, fix that and this is done
       - [x] SCOPED still not implemented (returned class name should be composed of input id + generated ID)
     - [ ] Support for inputting an array of objects with global styles
-    - [ ] Add support for :hover, after, before and child selectors. Try utilizing js etc instead of just ":hover" etc
+    - [x] Add support for :hover, after, before and child selectors. Add util function for formatting
+    - [ ] Support for muliple selectors for the same style (use an array of strings)
     - [ ] Rewrite css.js in typescript
 
   ***

@@ -16,30 +16,29 @@ export default {
         gap: '80px',
         justifyContent: 'center',
       },
-    })
-
-    addComponentStyle({
-      selector: '.section-landing h1',
-      style: {
-        color: color('white'),
-        ...getMixin('font', { size: '6rem', type: 'bold' }),
-      },
-    })
-
-    addComponentStyle({
-      selector: '.section-landing p',
-      style: {
-        color: color('white'),
-        ...getMixin('font', { size: '0.8rem' }),
-      },
-    })
-
-    addComponentStyle({
-      selector: '.section-landing img',
-      style: {
-        width: '256px',
-        height: '256px',
-      },
+      nested: [
+        {
+          selector: 'h1',
+          style: {
+            color: color('white'),
+            ...getMixin('font', { size: '6rem', type: 'bold' }),
+          },
+        },
+        {
+          selector: 'p',
+          style: {
+            color: color('white'),
+            ...getMixin('font', { size: '0.8rem' }),
+          },
+        },
+        {
+          selector: 'img',
+          style: {
+            width: '256px',
+            height: '256px',
+          },
+        },
+      ],
     })
 
     return h('div', { class: 'section-landing' }, [

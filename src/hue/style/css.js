@@ -1,4 +1,4 @@
-import { isObject, kebabize } from '../utils.js'
+import { isArray, isObject, kebabize } from '../utils.js'
 import {
   matchBase,
   matchModifiers,
@@ -45,8 +45,8 @@ const sanitizeClassName = (value) => {
 
 export const addMixin = (name, style) => (mixins[name] = style)
 export const getMixin = (name, params) => {
-  if (typeof mixins[name] !== 'function') return mixins[name]
-  // if (!isObject(mixins[name])) return mixins[name]
+  // Assumes mixin doesn't use parameters, will return only the style object
+  if (typeof mixins[name] !== 'function' && !params) return mixins[name]
 
   return mixins[name]({ ...params })
 }
@@ -278,7 +278,14 @@ const generateCssFromObject = (data) => {
 
   const styleCssNode = (node) => {
     if (node.style) {
-      css += nestedSelectors + node.selector + '{'
+      let selector = node.selector
+
+      if (isArray(node.selector)) {
+        // If selector is an array, join it by comma
+        selector = node.selector.join(',')
+      }
+
+      css += nestedSelectors + selector + '{'
       css += generateStyleObject(node.style)
       css += '}'
     }

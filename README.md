@@ -1,4 +1,4 @@
-# hue 0.0.7
+# hue 0.0.8
 
 Tired of vue and react? Well now you can be tired of both of them at the same time!
 
@@ -6,11 +6,14 @@ I present you hue. This is a hobby project where I create my own javascript fram
 
 ## Planned features
 
-- Simple router implementation, allowing to go back & forward. Should support query and hash parameters.
-- Simple State management (inspired by planned Vuex5 or Pinia)
-- Simplify component creation with a built in compiler to support writing fully functional components (inspired by react or _<script setup>_)
-- CSS in JS per component & global implementation
-- Make it actually functional
-- Component lifecycle hooks (probably will need compiler for this step)
+- SCSS in javascript compiler, support for inline styling, scoped modules. With mixins, nesting and most basic features
+- SPA routing with support for props, hash & query string
+- Simple global state management
+- Completely written in typescript (gotta learn it first)
+- Simple lifecycle hooks (only those which are possible without compiler)
 
-## Goal
+## Stretch goals
+
+- Write actual documentation, clean up code & make framework actually somewhat usable
+- Template compiler, some blend of JSX & vue syntax
+- Fully fleshed out reactivity, support for watch and computed functions (this step may require compiler and so it isn't in the scope for 0.1.0)
