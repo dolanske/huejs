@@ -219,10 +219,61 @@ export const generateClassStyles = (id) => {
 
 /*----------  In component generated styles  ----------*/
 
-// TODO: Add new documentaion to this function
-// When compiler is a thing, it should automatically use scopeId
-// returned from the function and assign its class name to the
-//
+// REVIEW: Flesh out scoped styling
+
+/**
+ * The default use, function accepts ether object or array of objects. These
+ * objects should follow certain rulesets. Always include `selector`.
+ *
+ * Optional fields are `style` or `self`. But you have to include at least one.
+ *
+ * `style` - Style object
+ * `self` - Contains self selectors like nth-child, hovers or pseudo elements. Use the `nth()` helper function
+ * when selecting nth-items, otherwise include other selectors as objects which contain styles in the usual format.
+ *
+ * Example
+ *
+ * `{
+ *    selector: 'h1',
+ *    self: {
+ *      hover {
+ *        color: 'red',
+ *      },
+ *      before: {
+ *        content: useString('The title: ')
+ *      }
+ *    },
+ *    style: {
+ *      color: 'blue'
+ *    }
+ * }`
+ *
+ * @param {Object | Array | String} type If omitted, automatically sets to global
+ * @param {Object | Array}          data Style object(s)
+ *
+ * **Global Style**
+ *
+ * `setStyle({ selector: 'h1', style: {color: 'red'}})`
+ *
+ * `setStyle([{
+ *  ...styleObject1
+ * }, {
+ *  ...styleObject2
+ * }])`
+ *
+ * **Scoped style (experimental)**
+ *
+ * Returns a class name to be applied to element of choice
+ *
+ * `const scopedClassName = setStyle('scoped', {...styles})`
+ *
+ * **Inline Style**
+ *
+ * Returns a string with formatted styling. This option ignores self or nested properties
+ * `const inlineStyleString = setStyle('inline', {...styles})`
+ *
+ */
+
 export const setStyle = (type, data) => {
   /**
    * Default binding, if we want to add a global style object.
@@ -280,14 +331,22 @@ const generateCssFromStyleObject = (data) => {
     if (!node.style && !node.self) return
     let selector
 
+    // If selector is an array, join them all by comma, otherwise simply assign it
     if (isArray(node.selector)) {
-      // If selector is an array, join it by comma
       selector = node.selector.join(',')
     } else {
       selector = node.selector
     }
 
-    css += nestedSelectors + selector + '{'
+    // If nested selectors are an array, iterate over each and combine with selector
+    // REVIEW: what if current selector is an array? (SHOULDNT BE)
+    if (isArray(nestedSelectors)) {
+      css += nestedSelectors.map((item) => `${item} ${selector}`).join(',')
+      css += '{'
+    } else {
+      css += nestedSelectors + selector + '{'
+    }
+
     css += generateStyleObject(node.style)
     css += '}'
     /**
@@ -303,13 +362,12 @@ const generateCssFromStyleObject = (data) => {
     }
 
     if (node.nested) {
-      // TODO: if parent node has selectors in an array,
-      // we must iterate over each selector and apply child-selecting accordingly
-      // NEED TO FIGURE THIS OUT
-      if (nestedSelectors !== selector + ' ' && !isArray(node.selector)) {
-        nestedSelectors += selector + ' '
-      } else {
-        nestedSelectors = node.selector.map((item) => item + '' + selector)
+      if (nestedSelectors !== selector + ' ') {
+        if (typeof node.selector === 'string') {
+          nestedSelectors += selector + ' '
+        } else {
+          nestedSelectors = node.selector
+        }
       }
 
       // Loop over nested children and call this function again

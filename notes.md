@@ -31,6 +31,11 @@
     - [x] Support for inputting an array of objects with global styles
     - [x] Add support for :hover, after, before and child selectors. Add util function for formatting
     - [ ] Support for muliple selectors for the same style (use an array of strings)
+      - [x] Array nesting for 1 level deep nested items
+      - [ ] Test array nesting of array nested selectors
+            ` { selector: ['.class1', '.class2'], nested: [{ selector: [h1, h2] }] }`
+      - [ ] Test nesting n deep
+      - [ ] Test out with :self properties
     - [ ] Rewrite css.js in typescript
 
   ***

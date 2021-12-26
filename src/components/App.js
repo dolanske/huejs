@@ -50,36 +50,33 @@ export default {
 
     // TESTING
 
-    // setStyle({
-    //   selector: ['.test', '.test-2', '.test-3'],
-    //   style: { color: 'red' },
-    //   nested: [
-    //     {
-    //       selector: 'h1',
-    //       style: {
-    //         color: 'blue',
-    //       },
-    //     },
-    //     {
-    //       selector: 'h2',
-    //       style: {
-    //         color: 'pink',
-    //       },
-    //     },
-    //   ],
-    // })
+    // TODO: Test double nesting
+    // TODO: Test multiple nested objects
+    // TODO: Test with :self attribute
 
-    // Supported
-    // setStyle([
-    //   {
-    //     selector: 'h1',
-    //     style: { color: 'red' },
-    //   },
-    //   {
-    //     selector: 'p',
-    //     style: { color: 'pink' },
-    //   },
-    // ])
+    setStyle({
+      selector: ['.test', '.test-2', '.test-3'],
+      style: { color: 'red' },
+      nested: [
+        {
+          selector: 'h1',
+          style: {
+            color: 'blue',
+          },
+          self: {
+            hover: {
+              color: 'yellow',
+            },
+          },
+        },
+        // {
+        //   selector: 'h2',
+        //   style: {
+        //     color: 'pink',
+        //   },
+        // },
+      ],
+    })
 
     return h('div', { class: 'app-wrap' }, [
       PageIndicator.render(),
