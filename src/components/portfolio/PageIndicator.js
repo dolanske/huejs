@@ -1,11 +1,11 @@
 import { h } from '../../hue/render/render'
-import { addComponentStyle, nth, useString } from '../../hue/style/css'
+import { setStyle, nth, useString } from '../../hue/style/css'
 import { from } from '../../hue/utils'
 import { color } from '../../script/color'
 
 export default {
   render() {
-    addComponentStyle({
+    setStyle({
       selector: '.navigation',
       style: {
         position: 'fixed',

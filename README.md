@@ -6,7 +6,7 @@ I present you hue.js; This is a hobby project in which I aim to create a simple 
 
 Huge props to Evan Uou and the whole vue.js team for inspiring me to create my own framework. These guys rock and I love what they are working on. I hope in the future I can create something that could compare to one of these awesome projects.
 
-NOTE: This framework is a passion project and is not intended for commercial use. But I encourage you to try it out and please, PLEASE report any issue or suggestion you might have. I am trying to learn and your feedback means the world to me. Thank you.
+**NOTE**: This framework is a passion project and is not intended for commercial use. But I encourage you to try it out and please, PLEASE report any issue or suggestion you might have. I am trying to learn and your feedback means the world to me. Thank you.
 
 ---
 

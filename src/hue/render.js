@@ -176,8 +176,6 @@ export function mountApp(
   let isMounted = false
   let prevVdom
 
-  createStyleComponent('global')
-
   watchEffect(() => {
     if (!isMounted) {
       prevVdom = App.render()
@@ -193,8 +191,5 @@ export function mountApp(
       /** Life cycle hook: onUpdated */
       if (onUpdated) onUpdated()
     }
-
-    // mounted()
-    generateClassStyles('global')
   })
 }

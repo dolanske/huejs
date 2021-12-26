@@ -20,10 +20,10 @@ let stylesToCompile = new Set()
 const styles = {}
 const mixins = {}
 
-/*----------  Helpers & Css in comment generator  ----------*/
+/*----------  Helpers & CSS in comment generator  ----------*/
 
-export const addStyle = (style) => stylesToCompile.add(style)
-export const addStyles = (styles) =>
+export const addStyleNode = (style) => stylesToCompile.add(style)
+export const addStyleNodes = (styles) =>
   styles.map((item) => stylesToCompile.add(item))
 
 // Removes any invalid characters from a class name
@@ -55,20 +55,20 @@ export const getMixin = (name, params) => {
  * Helper function to return formatted selector object without the
  * user having to input objects like these
  *
- * 'nth-child(even)': {
+ * `'nth-child(even)': {
  *    ...styles
- * }
+ * }`
  *
  * Such example can be written like this:
  *
- * ...nth('child', 'even', {
+ * `...nth('child', 'even', {
  *    ...styles
- * })
+ * })`
  *
  * On first glance it looks more complex, but given this is javascript, it makes
  * usage of variables, loops etc. way more clear and readable.
  *
- * @param {String} type The NTH selector ()child, of-type...
+ * @param {String} type The NTH selector (child, of-type...)
  * @param {String} index nth index (5, 2+n, odd, even...)
  * @param {Object} style Style object
  * @returns Formatted selector object
@@ -85,15 +85,15 @@ export const nth = (type = 'child', index, style) => {
  * CSS generation the quotation marks get removed, so this helper function
  * wraps them in another set of quotes to retain them.
  *
- *  content: useString() // Will display the pseudo element
+ *  `content: useString()` // Will display the pseudo element
  *
- *  content: useString('Hello World') // Will render 'Hello World' text
+ *  `content: useString('Hello World')` // Will render 'Hello World' text
  *
  * If the user is creating a list counter etc, they can insert the counter
  * variable in the single quotation marks. THat will get compiled without them
  * and the CSS will pick up on it.
  *
- *  content: 'ul-counter' // Will render ul-counter without quotes
+ *  `content: 'ul-counter'` // Will render ul-counter without quotes
  *
  * @param {String} str String to display within content
  * @returns Double quoted string to retain double quotes during style generation
@@ -120,7 +120,7 @@ const formatUnit = (val) => {
   return ''
 }
 
-const createStyle = (style) => {
+const formatClass = (style) => {
   let base = null
   let modifier = null
   let value = null
@@ -171,11 +171,11 @@ const createStyle = (style) => {
  */
 export function formatAddedStyleNode(value) {
   if (Array.isArray(value)) {
-    addStyles(value)
+    addStyleNodes(value)
     return value.map((item) => sanitizeClassName(item.split(':')[0])).join(' ')
   }
 
-  addStyle(value)
+  addStyleNode(value)
 
   return sanitizeClassName(value.split(':')[0])
 }
@@ -210,7 +210,7 @@ export const updateStyleComponent = (id, content) => {
 export const generateClassStyles = (id) => {
   // Loop over
   for (const key of stylesToCompile) {
-    nextStyle.add(createStyle(key))
+    nextStyle.add(formatClass(key))
   }
 
   updateStyleComponent(id, [...nextStyle].join(''))
@@ -223,13 +223,13 @@ export const generateClassStyles = (id) => {
 // When compiler is a thing, it should automatically use scopeId
 // returned from the function and assign its class name to the
 //
-export const addComponentStyle = (type, data) => {
+export const setStyle = (type, data) => {
   /**
    * Default binding, if we want to add a global style object.
    * We simply omit the type. But it must be checked for and
    * assign the parameters corrently after
    */
-  if (isObject(type)) {
+  if (isObject(type) || isArray(type)) {
     data = type
     type = 'global'
   }
@@ -237,7 +237,7 @@ export const addComponentStyle = (type, data) => {
   switch (type) {
     // Add global style tag, class and styles will be available globally
     case 'global': {
-      const css = generateCssFromObject(data)
+      const css = generateCssFromStyleObject(data)
 
       createStyleComponent(data.selector)
       updateStyleComponent(data.selector, css)
@@ -249,7 +249,7 @@ export const addComponentStyle = (type, data) => {
     case 'scoped': {
       data.selector =
         data.selector + '-' + String(Math.random().toFixed(8)).slice(2)
-      const css = generateCssFromObject(data)
+      const css = generateCssFromStyleObject(data)
       createStyleComponent(data.selector)
       updateStyleComponent(data.selector, css)
 
@@ -265,7 +265,7 @@ export const addComponentStyle = (type, data) => {
   }
 }
 
-const generateCssFromObject = (data) => {
+const generateCssFromStyleObject = (data) => {
   let css = ''
 
   /**
@@ -276,20 +276,20 @@ const generateCssFromObject = (data) => {
 
   let nestedSelectors = ''
 
-  const styleCssNode = (node) => {
-    if (node.style) {
-      let selector = node.selector
+  const formatStyleNode = (node) => {
+    if (!node.style && !node.self) return
+    let selector
 
-      if (isArray(node.selector)) {
-        // If selector is an array, join it by comma
-        selector = node.selector.join(',')
-      }
-
-      css += nestedSelectors + selector + '{'
-      css += generateStyleObject(node.style)
-      css += '}'
+    if (isArray(node.selector)) {
+      // If selector is an array, join it by comma
+      selector = node.selector.join(',')
+    } else {
+      selector = node.selector
     }
 
+    css += nestedSelectors + selector + '{'
+    css += generateStyleObject(node.style)
+    css += '}'
     /**
      * The self node ontains all selectors which are applied to the same node
      * For example nth-child, before, after or hover
@@ -303,14 +303,31 @@ const generateCssFromObject = (data) => {
     }
 
     if (node.nested) {
-      if (nestedSelectors !== node.selector + ' ')
-        nestedSelectors += node.selector + ' '
+      // TODO: if parent node has selectors in an array,
+      // we must iterate over each selector and apply child-selecting accordingly
+      // NEED TO FIGURE THIS OUT
+      if (nestedSelectors !== selector + ' ' && !isArray(node.selector)) {
+        nestedSelectors += selector + ' '
+      } else {
+        nestedSelectors = node.selector.map((item) => item + '' + selector)
+      }
+
       // Loop over nested children and call this function again
-      node.nested.forEach((child) => styleCssNode(child))
+      node.nested.forEach((child) => formatStyleNode(child))
     }
   }
+  /**
+   * If data is an array, it contains multiple main
+   * style objects. We detect it and iterate and apply style
+   * function to each object
+   */
 
-  styleCssNode(data)
+  if (isArray(data)) {
+    // console.log('is array', data)
+    data.map((item) => formatStyleNode(item))
+  } else if (isObject(data)) {
+    formatStyleNode(data)
+  }
 
   return css
 }

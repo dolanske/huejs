@@ -1,12 +1,12 @@
 import { h } from '../../hue/render'
-import { addComponentStyle, getMixin } from '../../hue/style/css'
+import { setStyle, getMixin } from '../../hue/style/css'
 import { color } from '../../script/color.js'
 
 import logo from '../../assets/img/logo.png'
 
 export default {
   render() {
-    addComponentStyle({
+    setStyle({
       selector: '.section-landing',
       style: {
         display: 'flex',

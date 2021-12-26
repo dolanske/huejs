@@ -5,11 +5,11 @@ import RouterLink from '../hue/router/RouterLink.js'
 
 import RouteHome from './route-containers/RouteHome.js'
 import RouteAbout from './route-containers/RouteAbout.js'
-import { addComponentStyle } from '../hue/style/css.js'
+import { setStyle } from '../hue/style/css.js'
 
 export default {
   render() {
-    addComponentStyle('global', {
+    setStyle('global', {
       selector: '#app',
       style: {
         display: 'flex',
