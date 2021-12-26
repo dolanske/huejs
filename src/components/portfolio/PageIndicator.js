@@ -21,14 +21,14 @@ export default {
         {
           selector: 'li',
           self: {
-            ...nth('child', 'odd', {
+            ...nth('odd', {
               width: '16px',
               height: '16px',
               border: `1px solid ${color('border')}`,
               borderRadius: '50%',
               cursor: 'pointer',
             }),
-            ...nth('child', 'even', {
+            ...nth('even', {
               height: '80px',
               borderRight: `1px solid ${color('border')}`,
             }),

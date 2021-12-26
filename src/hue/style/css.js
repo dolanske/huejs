@@ -68,15 +68,27 @@ export const getMixin = (name, params) => {
  * On first glance it looks more complex, but given this is javascript, it makes
  * usage of variables, loops etc. way more clear and readable.
  *
- * @param {String} type The NTH selector (child, of-type...)
- * @param {String} index nth index (5, 2+n, odd, even...)
- * @param {Object} style Style object
+ * @param {String | Number} binding The NTH selector (child, of-type...)
+ * @param {String | Object} index nth index (5, 2+n, odd, even...)
+ * @param {Object | undefined} style Style object
  * @returns Formatted selector object
  */
 
-// TODO: default will be child, add an option to omit type
-export const nth = (type = 'child', index, style) => {
-  return { [`nth-${type}(${index})`]: style }
+export const nth = (binding, index, style) => {
+  /**
+   * If this condition is met, we can assume the user is using nth() with the default binding
+   * of selector. Aka the desired usage is `nth-child()`
+   *
+   * We then shift all the parameter by 1 and assign binding as 'child'
+   *
+   */
+  if (!style && isObject(index)) {
+    style = index
+    index = binding
+    binding = 'child'
+  }
+
+  return { [`nth-${binding}(${index})`]: style }
 }
 
 /**
