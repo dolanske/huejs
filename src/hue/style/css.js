@@ -43,14 +43,63 @@ const sanitizeClassName = (value) => {
  * passing in an object of parameters.
  */
 
-export const addMixin = (name, styleFunc) => (mixins[name] = styleFunc)
-export const getMixin = (name, params) => mixins[name]({ ...params })
+export const addMixin = (name, style) => (mixins[name] = style)
+export const getMixin = (name, params) => {
+  if (typeof mixins[name] !== 'function') return mixins[name]
+  // if (!isObject(mixins[name])) return mixins[name]
+
+  return mixins[name]({ ...params })
+}
 
 /**
- * Converts input to a compiler readable array which contains the selector at index 0
- * and the styles to apply at index 1
+ * Helper function to return formatted selector object without the
+ * user having to input objects like these
+ *
+ * 'nth-child(even)': {
+ *    ...styles
+ * }
+ *
+ * Such example can be written like this:
+ *
+ * ...nth('child', 'even', {
+ *    ...styles
+ * })
+ *
+ * On first glance it looks more complex, but given this is javascript, it makes
+ * usage of variables, loops etc. way more clear and readable.
+ *
+ * @param {String} type The NTH selector ()child, of-type...
+ * @param {String} index nth index (5, 2+n, odd, even...)
+ * @param {Object} style Style object
+ * @returns Formatted selector object
  */
-export const nth = (type, which, style) => [`nth-${type}(${which})`, style]
+
+// TODO: default will be child, add an option to omit type
+export const nth = (type = 'child', index, style) => {
+  return { [`nth-${type}(${index})`]: style }
+}
+
+/**
+ * Helper function to format string values for certain CSS properties.
+ * Some properties directly require quotation marks as a value input. During
+ * CSS generation the quotation marks get removed, so this helper function
+ * wraps them in another set of quotes to retain them.
+ *
+ *  content: useString() // Will display the pseudo element
+ *
+ *  content: useString('Hello World') // Will render 'Hello World' text
+ *
+ * If the user is creating a list counter etc, they can insert the counter
+ * variable in the single quotation marks. THat will get compiled without them
+ * and the CSS will pick up on it.
+ *
+ *  content: 'ul-counter' // Will render ul-counter without quotes
+ *
+ * @param {String} str String to display within content
+ * @returns Double quoted string to retain double quotes during style generation
+ */
+
+export const useString = (str) => (str ? `"${str}"` : '""')
 
 /**
  * We take class value. Check the value's type and determine, if unit can
@@ -211,7 +260,7 @@ export const addComponentStyle = (type, data) => {
 
     // Generate and return formatted inline styles
     case 'inline': {
-      return generateInlineStyles(data)
+      return generateStyleObject(data)
     }
   }
 }
@@ -228,25 +277,30 @@ const generateCssFromObject = (data) => {
   let nestedSelectors = ''
 
   const styleCssNode = (node) => {
-    // TODO: During recursive calls, must apply previous css selectors
-    // Currently this function actually returns SCSS
+    if (node.style) {
+      css += nestedSelectors + node.selector + '{'
+      css += generateStyleObject(node.style)
+      css += '}'
+    }
 
-    // css += nestedSelectors
+    /**
+     * The self node ontains all selectors which are applied to the same node
+     * For example nth-child, before, after or hover
+     */
+    if (node.self) {
+      Object.entries(node.self).map(([key, value]) => {
+        css += `${node.selector}:${key}` + '{'
+        css += generateStyleObject(value)
+        css += '}'
+      })
+    }
 
-    css += nestedSelectors + node.selector + '{'
-    css += generateInlineStyles(node.style)
-    css += '}'
-
-    // TODO: implement self. stuff
-    // add events too
-
-    if (node.nth)
-      if (node.nested) {
-        if (nestedSelectors !== node.selector + ' ')
-          nestedSelectors += node.selector + ' '
-        // Loop over nested children and call this function again
-        node.nested.forEach((child) => styleCssNode(child))
-      }
+    if (node.nested) {
+      if (nestedSelectors !== node.selector + ' ')
+        nestedSelectors += node.selector + ' '
+      // Loop over nested children and call this function again
+      node.nested.forEach((child) => styleCssNode(child))
+    }
   }
 
   styleCssNode(data)
@@ -254,7 +308,7 @@ const generateCssFromObject = (data) => {
   return css
 }
 
-const generateInlineStyles = (data) => {
+const generateStyleObject = (data) => {
   if (!isObject(data)) return ''
 
   let style = ''
@@ -265,9 +319,8 @@ const generateInlineStyles = (data) => {
 
   if (Object.keys(styleObject).length === 0) return ''
 
-  Object.entries(styleObject).forEach((entry) => {
-    const [index, value] = entry
-    style += kebabize(index) + ':' + value + ';'
+  Object.entries(styleObject).forEach(([property, value]) => {
+    style += kebabize(property) + ':' + value + ';'
   })
 
   return style

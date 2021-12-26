@@ -1,5 +1,5 @@
 import { h } from '../../hue/render/render'
-import { addComponentStyle, nth } from '../../hue/style/css'
+import { addComponentStyle, nth, useString } from '../../hue/style/css'
 import { from } from '../../hue/utils'
 import { color } from '../../script/color'
 
@@ -12,7 +12,6 @@ export default {
         right: '80px',
         bottom: '80px',
         listStyle: 'none',
-        color: color('white'),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -27,12 +26,15 @@ export default {
               height: '16px',
               border: `1px solid ${color('border')}`,
               borderRadius: '50%',
+              cursor: 'pointer',
             }),
             ...nth('child', 'even', {
               height: '80px',
               borderRight: `1px solid ${color('border')}`,
             }),
-            before: {},
+            hover: {
+              backgroundColor: color('background'),
+            },
           },
         },
       ],

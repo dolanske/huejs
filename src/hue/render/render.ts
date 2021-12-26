@@ -12,7 +12,7 @@ export function h(
   props: string | object | undefined | Array<string | object> ,
   children: Array<string | object> | undefined | string
 ): Node {
-  // We can omit props when calling the function
+  // We can omit prps when calling the function
   if (
     typeof props === 'string' ||
     typeof props === 'number' ||

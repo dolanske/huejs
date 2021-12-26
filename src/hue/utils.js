@@ -6,8 +6,12 @@ export function kebabize(str) {
 }
 
 export function isObject(value) {
-  var type = typeof value
+  let type = typeof value
   return value != null && (type == 'object' || type == 'function')
+}
+
+export function isArray(value) {
+  return Array.isArray(value)
 }
 
 export function isNil(value) {
@@ -17,7 +21,7 @@ export function isNil(value) {
 export function from(n) {
   let arr = []
 
-  for (var i = 1; i <= n; i++) {
+  for (let i = 1; i <= n; i++) {
     arr.push(i)
   }
 
