@@ -2,11 +2,13 @@
 
 Tired of vue and react? Well now you can be tired of both of them at the same time!
 
-I present you hue. This is a hobby project where I create my own javascript framework and pack it up with cool features. It takes inspiration from both Vue3 and React, but mainly from Vue because that's a framework I've been working in for over year and I absolutely adore it. My end goal is to create a working framework with router, state management and CSS completely generated with javasript.
+I present you hue.js; This is a hobby project in which I aim to create a simple front-end javascript framework which handles everything from reactivity, components and routing to state management and the ability to write SCSS. All within my beloved javascript. The main goal I have in mind with this project is to keep learning new things and staying in touch with the ever-evolving world of front-end development.
+
+Huge props to Evan you and the whole Vue.js team for inspiring me to create my own framework. These guys rock and I love what they are working on. I hope in the future I can create something that could compare to one of these awesome projects.
 
 ## Planned features
 
-- SCSS in javascript compiler, support for inline styling, scoped modules. With mixins, nesting and most basic features
+- SCSS in javascript which compiles to raw css, support for nesting, mixins, variables, scoped modules and as many quality of life features I can come up with
 - SPA routing with support for props, hash & query string
 - Simple global state management
 - Completely written in typescript (gotta learn it first)
