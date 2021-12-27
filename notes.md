@@ -45,7 +45,9 @@
   - [ ] implement computed(callback: void)
   - [ ] implement watch(property: reactive, callback: void)
 
-- [ ] Create a compiler, adds some boilerplate to the components (RETHINK)
+---
+
+- [ ] (OUT OF SCOPE) Create a compiler, adds some boilerplate to the components
 
   - [ ] Test if tempalte string usage is possible
   - \*\*[ ] Rethink add auto injection of createTemplate during rendering. Components should only contain a render function which returns a string template
@@ -57,10 +59,10 @@
 
   ***
 
-- [ ] Lifecycle hooks
-  - onCreated() // Gets called in mount func
-  - onUpdated() // Also should be somewhere in the patch func
-  - beforeDestroy() // Could be implemented in the patch func
+- [ ] (OUT OF SCOPE) Lifecycle hooks for components
+  - onCreated()
+  - onUpdated()
+  - beforeDestroy()
 
 ---
 

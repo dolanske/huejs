@@ -1,4 +1,4 @@
-import App from './components/App.js'
+import App from './components/App2.js'
 import { mountApp } from './hue/render.js'
 import { Route } from './hue/router/types.js'
 
@@ -6,26 +6,26 @@ import { Route } from './hue/router/types.js'
 import { createRouter } from './hue/router/router.ts'
 import RouteHome from './components/route-containers/RouteHome.js'
 import RouteAbout from './components/route-containers/RouteAbout.js'
-// import { createStore } from './store/store.js'
+//@ts-ignore
+// import { createStore } from './store/store.ts' 
 
 
 /**
  * ---------------- State ----------------
  */
 
-// createStore({
-//   id: 'counter',
-//   state: {
+// createStore('counter', {
+//   state: () => ({
 //     count: 0,
-//   },
-//   actors: {
-//     add({ state }) {
-//       state.count++
-//     },
-//   },
-//   getters: {
-//     getCount: (state) => state.count,
-//   },
+//   }),
+  // actors: {
+  //   add({ state }) {
+  //     state.count++
+  //   },
+  // },
+  // getters: {
+  //   getCount: (state) => state.count,
+  // },
 // })
 
 /**

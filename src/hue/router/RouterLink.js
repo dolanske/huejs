@@ -2,7 +2,7 @@ import { h } from '../render.js'
 import { useRouter } from './router.ts'
 
 export default {
-  render({ name, text }) {
+  render({ name, text, props }) {
     const router = useRouter()
     const to = router.getRoute({ by: 'name', value: name })
 

@@ -1,5 +1,4 @@
 import { h } from '../render.js'
-import { reactive, watchEffect } from '../reactive.js'
 import { useRoute } from './router.ts'
 
 export default {

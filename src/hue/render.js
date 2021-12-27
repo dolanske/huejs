@@ -42,7 +42,6 @@ export function h(tag, props, children) {
 // Mount function which appends a new element to the real DOM
 function mount(vnode, container) {
   // We assign it to vnode.el to also compare when we use the patch function
-
   const el = (vnode.el = document.createElement(vnode.tag))
 
   // Props
@@ -72,9 +71,11 @@ function mount(vnode, container) {
     } else {
       // If its an array, call itself and repeat the process
       vnode.children.forEach((child) => {
-        // TODO: Add support for simple text children
-
-        mount(child, el)
+        if (typeof child === 'string') {
+          el.textContent += ' ' + child
+        } else {
+          mount(child, el)
+        }
       })
     }
   }

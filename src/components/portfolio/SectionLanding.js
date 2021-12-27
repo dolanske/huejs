@@ -1,4 +1,4 @@
-import { h } from '../../hue/render'
+import { h } from '../../hue/render/render'
 import { setStyle, getMixin } from '../../hue/style/css'
 import { color } from '../../script/color.js'
 

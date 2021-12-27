@@ -22,6 +22,9 @@ export function h(
     props = {}
   }
 
+  // TODO: Add support for simply passing a string
+  // TODO: Add support for passing array of strings as a child
+
   // Convert any non-array children to string for the HTML node creation
   if (!isNil(children)) {
     if (!Array.isArray(children)) {
